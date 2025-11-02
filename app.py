@@ -13,7 +13,7 @@ CHUNK = 1024
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 44100
-ENERGY_THRESH = 4000
+ENERGY_THRESH = 40000
 ZCR_THRESH = 0.025
 SILENT_CHUNKS = 10
 
@@ -81,3 +81,4 @@ def get_status():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
