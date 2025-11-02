@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Speech Activity Detector UI</title>
+  <style>
+    body { font-family: Arial; margin: 40px; }
+    .mic-status { font-size: 2em; margin-bottom: 1em; }
+    .on { color: green; }
+    .off { color: red; }
+    .data { margin-bottom: 1em; }
+    .circle {
+      width: 30px; height: 30px; border-radius: 50%;
+      display: inline-block; vertical-align: middle; margin-right: 6px;
+    }
+    .circle.on { background: #00eb4e; border: 2px solid #015c13;}
+    .circle.off { background: #c11818; border: 2px solid #611212;}
+  </style>
+</head>
+<body>
+  <h1>Voice Activity Detection</h1>
+  <div class="mic-status"><span class="circle off" id="mic-led"></span><span id="mic-text">Mic is OFF</span></div>
+  <div class="data">
+    Frame Energy (MSE): <span id="energy">0</span>
+  </div>
+  <div class="data">
+    Zero Crossing Rate: <span id="zcr">0</span>
+  </div>
+  <div style="color: gray;font-size:13px">Current threshold is set to 4000</div>
+  <script>
+    function updateStatus() {
+      fetch('http://127.0.0.1:5000/status')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('energy').innerText = data.energy.toFixed(2);
+          document.getElementById('zcr').innerText = data.zcr.toFixed(3);
+          if(data.mic_on) {
+            document.getElementById('mic-led').className = 'circle on';
+            document.getElementById('mic-text').innerText = 'Mic is ON';
+          } else {
+            document.getElementById('mic-led').className = 'circle off';
+            document.getElementById('mic-text').innerText = 'Mic is OFF';
+          }
+        });
+    }
+    setInterval(updateStatus, 500);
+    updateStatus();
+  </script>
+</body>
+</html>
